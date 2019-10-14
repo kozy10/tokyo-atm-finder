@@ -10,6 +10,8 @@ class EchoBot extends ActivityHandler {
     // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.
     this.onMessage(async (context, next) => {
       if (context.activity.text === 'Location') {
+        await context.sendActivity('Thank you! Nearest ATM is here!');
+
         const location = {
           "channelData": {
             "type": "location",
@@ -41,7 +43,7 @@ class EchoBot extends ActivityHandler {
         }
         await context.sendActivity(message);
       } else if (context.activity.text.match(/ATM/)) {
-        await context.sendActivity('Which credit card provider ATM are you looking for');
+        await context.sendActivity('Which credit card provider ATM are you looking for?');
 
         const reply = {
           "channelData": {
