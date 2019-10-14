@@ -9,8 +9,26 @@ class EchoBot extends ActivityHandler {
     super();
     // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.
     this.onMessage(async (context, next) => {
-      if (context.activity.text.match(/ATM/)) {
-
+      if (context.activity.text === 'MUFG' || context.activity.text === 'SMBC' || context.activity.text === 'Mizuho') {
+        const message = {
+          "channelData": {
+            "type": "template",
+            "altText": "This is a buttons template",
+            "template": {
+              "type": "buttons",
+              "text": "Please send me your location",
+              "actions": [
+                {
+                  "type": "uri",
+                  "label": "Send location",
+                  "uri": "line://nv/location"
+                }
+              ]
+            }
+          }
+        }
+        await context.sendActivity(message);
+      } else if (context.activity.text.match(/ATM/)) {
         await context.sendActivity('Which credit card provider ATM are you looking for');
 
         const reply = {
