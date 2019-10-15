@@ -4,22 +4,58 @@
 const { ActivityHandler, ActivityTypes } = require('botbuilder');
 const { Activity } = require('botframework-schema')
 
+const ATMS = [
+    {
+        "type": "location",
+        "title": "Shibuya ATM",
+        "address": "〒150-0002 東京都渋谷区渋谷２丁目２１−１",
+        "latitude": 35.65910807942215,
+        "longitude": 139.70372892916203
+    },
+    {
+        "type": "location",
+        "title": "Mita Ziro ATM",
+        "address": "〒108-0073 東京都港区三田２丁目１６−４",
+        "latitude": 35.6479527,
+        "longitude": 139.7317562
+    },
+];
+
+// Copied from https://qiita.com/kawanet/items/a2e111b17b8eb5ac859a
+function distance(lat1, lng1, lat2, lng2) {
+  lat1 *= Math.PI / 180;
+  lng1 *= Math.PI / 180;
+  lat2 *= Math.PI / 180;
+  lng2 *= Math.PI / 180;
+  return 6371 * Math.acos(Math.cos(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1) + Math.sin(lat1) * Math.sin(lat2));
+}
+function findNearestAtm(latitude, longitude) {
+    const distances = ATMS.map((atm) => distance(latitude, longitude, atm.latitude, atm.longitude));
+    const result = distances.reduce((nearestAtmIndex, distance, index) => {
+       if (index === 0) {
+           return 0;
+       }
+       if (distance < distances[nearestAtmIndex]) {
+           return index;
+       } else {
+           return nearestAtmIndex;
+       }
+    }, 0);
+    return ATMS[result];
+}
+
 class EchoBot extends ActivityHandler {
   constructor() {
     super();
     // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.
     this.onMessage(async (context, next) => {
       if (context.activity.text === 'Location') {
+        const geo = context.activity.entities[0].Geo;
+        const { Elevation, Latitude, Longitude } = geo;
         await context.sendActivity('Thank you! Nearest ATM is here!');
 
         const location = {
-          "channelData": {
-            "type": "location",
-            "title": "ATM",
-            "address": "〒150-0002 東京都渋谷区渋谷２丁目２１−１",
-            "latitude": 35.65910807942215,
-            "longitude": 139.70372892916203
-          }
+          "channelData": findNearestAtm(Latitude, Longitude)
         }
         await context.sendActivity(location);
       }
