@@ -89,7 +89,7 @@ class EchoBot extends ActivityHandler {
               "type": "carousel",
               "columns": [
                 {
-                  "thumbnailImageUrl": "https://www.mufg.jp/dam_vcms/cmn/og_image.jpg",
+                  "thumbnailImageUrl": "https://www.mufg.jp/dam/cmn/og_image.jpg",
                   "imageBackgroundColor": "#FFFFFF",
                   "text": "MUFG",
                   "actions": [
@@ -113,7 +113,7 @@ class EchoBot extends ActivityHandler {
                   ]
                 },
                 {
-                  "thumbnailImageUrl": "https://www.mizuho-fg.com/company/policy/brand/images/brand_logo.png",
+                  "thumbnailImageUrl": "https://www.asifma.org/wp-content/uploads/2018/10/website_mizuho.png",
                   "imageBackgroundColor": "#000000",
                   "text": "Mizuho",
                   "actions": [
